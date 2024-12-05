@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <%= form_with model: @post, local: true do |form| %>
+        <% if @post.errors.any? %>
+          <div id="error_explanation" class="alert alert-danger">
+            <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+            <ul>
+              <% @post.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :title, class: 'form-label' %>
+          <%= form.text_field :title, class: 'form-control form-control-sm' %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :content, class: 'form-label' %>
+          <%= form.text_area :content, class: 'form-control', rows: 5 %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :image, class: 'form-label' %>
+          <%= form.file_field :image, class: 'form-control' %>
+        </div>
+
+        <div class="form-group">
+          <%= form.submit 'Submit', class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

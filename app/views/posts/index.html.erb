@@ -1,0 +1,42 @@
+<% if user_signed_in? %>
+  <!-- Display Posts for All Users -->
+  <% if @posts.any? %>
+    <div class="row">
+      <% @posts.each do |post| %>
+        <div class="col-md-4 mb-4">
+          <div class="card">
+            <% if post.image.attached? %>
+              <%= image_tag post.image, alt: post.title, class: 'card-img-top' %>
+            <% end %>
+            <div class="card-body">
+              <h5 class="card-title"><%= link_to post.title, post %></h5>
+              <p class="card-text"><%= truncate(post.content, length: 100) %></p>
+            </div>
+            <div class="card-footer">
+              <!-- Options for Editors -->
+              <% if current_user.role == "editor" && post.status == "pending_approval" %>
+                <%= form_with url: approve_post_path(post), method: :put, local: true do |form| %>
+                  <%= form.label "comment_#{post.id}", 'Comment' %>
+                  <%= form.text_area :comment, rows: 3, required: true, class: 'form-control' %>
+                  <div class="btn-group mt-2">
+                    <%= form.submit 'Approve', class: 'btn btn-success' %>
+                    <%= form.submit 'Reject', name: 'reject', value: 'reject', class: 'btn btn-danger' %>
+                  </div>
+                <% end %>
+              <% end %>
+
+              <!-- Options for Admins -->
+              <% if current_user.role == "admin" && post.status == "approved" %>
+                <%= button_to 'Publish', publish_post_path(post), method: :put, class: 'btn btn-primary' %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p>No posts available.</p>
+  <% end %>
+<% else %>
+  <p>You must be logged in to view the posts.</p>
+<% end %>

@@ -1,0 +1,86 @@
+<div class="container">
+  <!-- Post Title -->
+  <div class="row">
+    <div class="col-md-8">
+      <h2 class="display-4"><%= @post.title %></h2>
+    </div>
+  </div>
+
+  <!-- Post Content -->
+  <div class="row">
+    <div class="col-md-8">
+      <p><%= @post.content %></p>
+    </div>
+  </div>
+
+  <!-- Post Image (if attached) -->
+  <div class="row">
+    <div class="col-md-8">
+      <% if @post.image.attached? %>
+        <div class="text-left">
+          <%= image_tag @post.image, alt: @post.title, class: 'img-fluid rounded' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if current_user.role == 'author' %>
+  <!-- Post Status -->
+  <div class="row">
+    <div class="col-md-8">
+      <h5>Status: <%= @post.status.capitalize %></h5>
+    </div>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col-md-8">
+      <% if @post.status == 'draft' || @post.status == 'pending_revision' %>
+        <%= button_to 'Submit for Approval', submit_for_approval_post_path(@post), method: :patch, class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+
+  <!-- Edit Button for Author/Admin -->
+  <div class="row mt-3">
+    <div class="col-md-8">
+      <% if current_user == @post.user || current_user.role == 'admin' %>
+        <%= link_to 'Edit', edit_post_path(@post), class: 'btn btn-primary' %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Approval/Rejection for Editors/Admin -->
+  <div class="row mt-3">
+    <div class="col-md-8">
+      <% if current_user.role == 'editor' && @post.status == 'pending_approval' %>
+        <%= link_to 'Approve', approve_post_path(@post), method: :patch, class: 'btn btn-success mr-2' %>
+        <%= link_to 'Reject', reject_post_path(@post), method: :patch, class: 'btn btn-danger' %>
+        <%= link_to 'Request Revision', request_revision_post_path(@post), method: :patch, class: 'btn btn-secondary' %>
+      <% elsif current_user.role == 'admin' && @post.status == 'approved' %>
+        <%= button_to 'Publish', publish_post_path(@post), method: :patch, class: 'btn btn-warning', data: { confirm: 'Are you sure you want to publish this post?' } %>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- Post History (for Admins) -->
+  <% if current_user.role == 'admin' %>
+    <div class="row mt-5">
+      <div class="col-md-8">
+        <h3 class="h4">History</h3>
+        <ul class="list-unstyled">
+          <% @post.post_histories.each do |history| %>
+            <li class="border-bottom mb-3 pb-2">
+              <strong><%= history.action.capitalize %></strong> 
+              by <%= history.user.role %> <!-- Change to `username` if available -->
+              at <%= history.created_at.strftime("%B %d, %Y %I:%M %p") %>
+              <% if history.comment.present? %>
+                <p class="mt-2"><strong>Comment:</strong> <%= history.comment %></p>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+</div>

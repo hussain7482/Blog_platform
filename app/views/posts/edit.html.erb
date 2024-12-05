@@ -1,0 +1,36 @@
+<!-- app/views/posts/edit.html.erb -->
+<h2>Edit Post</h2>
+
+<%= form_with model: @post, local: true do |form| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <ul>
+        <% @post.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title, value: @post.title %> <!-- pre-filled with post title -->
+  </div>
+
+  <div class="field">
+    <%= form.label :content %>
+    <%= form.text_area :content, value: @post.content %> <!-- pre-filled with post content -->
+  </div>
+
+  <div class="field">
+    <%= form.label :image %>
+    <%= form.file_field :image %> <!-- allow the user to upload a new image -->
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Update Post' %>
+  </div>
+<% end %>
+
+<%= link_to 'Back', @post %>

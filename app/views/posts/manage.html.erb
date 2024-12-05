@@ -1,0 +1,58 @@
+<% if @posts.any? %>
+  <div class="row">
+    <% @posts.each do |post| %>
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <% if post.image.attached? %>
+            <%= image_tag post.image, alt: post.title, class: 'card-img-top' %>
+          <% end %>
+          <div class="card-body">
+            <h5 class="card-title"><%= link_to post.title, post %></h5>
+            <p class="card-text"><%= truncate(post.content, length: 100) %></p>
+          </div>
+          <div class="card-footer">
+            <!-- Options for Editors -->
+            <% if current_user.role == "editor" %>
+              <% if post.status == "pending_approval" %>
+                <!-- Group the forms into a button group -->
+                <div class="btn-group" role="group">
+                  <!-- Approve form -->
+                  <%= form_with url: approve_post_path(post), method: :patch, local: true do |form| %>
+                    <%= form.label "comment_#{post.id}", 'Comment' %>
+                    <%= form.text_area :comment, rows: 3, required: true, class: 'form-control mb-2' %>
+                    <%= form.submit 'Approve', class: 'btn btn-success' %>
+                  <% end %>
+
+                  <!-- Reject form -->
+                  <%= form_with url: reject_post_path(post), method: :patch, local: true do |form| %>
+                    <%= form.label "comment_#{post.id}", 'Comment' %>
+                    <%= form.text_area :comment, rows: 3, required: true, class: 'form-control mb-2' %>
+                    <%= form.submit 'Reject', class: 'btn btn-danger' %>
+                  <% end %>
+
+                  <!-- Request Revision form -->
+                  <%= form_with url: request_revision_post_path(post), method: :patch, local: true do |form| %>
+                    <%= form.label "comment_#{post.id}", 'Comment' %>
+                    <%= form.text_area :comment, rows: 3, required: true, class: 'form-control mb-2' %>
+                    <%= form.submit 'Request Revision', class: 'btn btn-secondary' %>
+                  <% end %>
+                </div>
+              <% end %>
+            <% end %>
+
+            <!-- Options for Admins -->
+            <% if current_user.role == "admin" %>
+              <% if post.status == "approved" %>
+                <%= button_to 'Publish', publish_post_path(post), method: :patch, class: 'btn btn-primary' %>
+              <% elsif post.status == "published" %>
+                <%= link_to 'Archive', archive_post_path(post), method: :patch, class: 'btn btn-danger' %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p>No posts available for management.</p>
+<% end %>

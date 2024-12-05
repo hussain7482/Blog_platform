@@ -1,0 +1,26 @@
+<h2>Your Unpublished Posts</h2>
+
+<% if @unpublished_posts.any? %>
+  <ul>
+    <% @unpublished_posts.each do |post| %>
+       <li>
+        <h2><%= link_to post.title, post %></h2>
+
+        <!-- Display the image if it exists -->
+        <% if post.image.attached? %>
+          <%= image_tag post.image, alt: post.title, class: 'post-image' %>
+        <% end %>
+
+        <p><%= truncate(post.content, length: 100) %></p>
+        <p>Status: <%= post.status.capitalize %></p>
+
+        <!-- Submit for Approval button for drafts -->
+        <% if post.status == 'draft' %>
+          <%= button_to 'Submit for Approval', submit_for_approval_post_path(post), method: :put, class: 'btn btn-warning', data: { turbo_method: :put, turbo_confirm: 'Are you sure?' } %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>You have no unpublished posts.</p>
+<% end %>
