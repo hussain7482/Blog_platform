@@ -22,7 +22,7 @@ Rails.application.configure do
   end
 
   # Active Storage setup
-  config.active_storage.service = :local
+  config.active_storage.service = :cloudinary
 
   # Mailer setup
   config.action_mailer.raise_delivery_errors = true
