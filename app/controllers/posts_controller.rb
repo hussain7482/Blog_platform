@@ -1,8 +1,7 @@
 # app/controllers/posts_controller.rb
 class PostsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_post,
-                only: %i[edit update show approve reject publish submit_for_approval request_revision destroy]
+  before_action :set_post, only: %i[edit update show approve reject publish submit_for_approval request_revision destroy]
   before_action :authorize_post, only: %i[edit update approve reject publish destroy]
 
   def index
