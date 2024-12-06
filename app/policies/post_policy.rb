@@ -9,14 +9,14 @@ class PostPolicy < ApplicationPolicy
   end
 
   def approve?
-    user.editor? && record.status == "pending_approval"
+    user.editor? && record.status == 'pending_approval'
   end
 
   def reject?
-    user.editor? && record.status == "pending_approval"
+    user.editor? && record.status == 'pending_approval'
   end
 
   def publish?
-    user.admin? && record.status == "approved"
+    user.admin? && record.status == 'approved'
   end
 end

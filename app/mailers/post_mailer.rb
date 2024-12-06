@@ -1,14 +1,12 @@
 class PostMailer < ApplicationMailer
   default from: 'tousifh111@gmail.com'
 
-
   def post_notification(post, user, subject)
     @post = post
     @user = user
     mail(to: @user.email, subject: subject)
   end
 
-  
   def post_approved(post, user)
     post_notification(post, user, 'Your Post Has Been Approved')
   end

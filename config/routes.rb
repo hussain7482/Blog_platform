@@ -10,8 +10,7 @@ Rails.application.routes.draw do
       patch :request_revision
     end
   end
-  get 'unpublished_posts', to: 'posts#unpublished_posts'
+  # get 'unpublished_posts', to: 'posts#unpublished_posts'
   patch 'posts/:id/submit_for_approval', to: 'posts#submit_for_approval', as: 'submit_for_approval_post'
   get 'manage_posts', to: 'posts#manage', as: 'manage_posts'
-
 end

@@ -44,11 +44,20 @@
   <!-- Edit Button for Author/Admin -->
   <div class="row mt-3">
     <div class="col-md-8">
-      <% if current_user == @post.user || current_user.role == 'admin' %>
+    <% if current_user == @post.user && (@post.status == 'draft' || @post.status == 'pending_revision') %>
         <%= link_to 'Edit', edit_post_path(@post), class: 'btn btn-primary' %>
       <% end %>
     </div>
   </div>
+
+  <div class="row mt-3">
+  <div class="col-md-8">
+  <% if current_user == @post.user %>
+      <%= button_to 'Delete', post_path(@post), method: :delete, class: 'btn btn-danger', data: { confirm: 'Are you sure you want to delete this post?' } %>
+
+    <% end %>
+  </div>
+ </div>
 
   <!-- Approval/Rejection for Editors/Admin -->
   <div class="row mt-3">

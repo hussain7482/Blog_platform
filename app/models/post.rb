@@ -16,11 +16,9 @@ class Post < ApplicationRecord
     post_histories.create(action: action, user: user, comment: comment)
   end
 
-  
-
   private
 
   def set_default_status
-    self.status ||= 'draft'  # This will set the status to 'draft' if it's nil
+    self.status ||= 'draft' # This will set the status to 'draft' if it's nil
   end
 end
