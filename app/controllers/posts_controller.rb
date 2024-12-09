@@ -1,8 +1,9 @@
 # app/controllers/posts_controller.rb
 class PostsController < ApplicationController
+  include Pundit
   before_action :authenticate_user!
   before_action :set_post, only: %i[edit update show approve reject publish submit_for_approval request_revision destroy]
-  before_action :authorize_post, only: %i[edit update approve reject publish destroy]
+  before_action  -> {authorize @post}, only: %i[edit update approve reject publish destroy]
 
   def index
     @posts = Post.where(status: 'published')
@@ -97,15 +98,5 @@ class PostsController < ApplicationController
 
   def post_params
     params.require(:post).permit(:title, :content, :image)
-  end
-
-  def authorize_post
-    if current_user.role == 'author'
-      redirect_to root_path, alert: 'Not authorized' unless @post.user == current_user
-    elsif current_user.role == 'editor'
-      redirect_to root_path, alert: 'Not authorized' unless @post.status == 'pending_approval'
-    elsif current_user.role == 'admin'
-      redirect_to root_path, alert: 'Not authorized' unless @post.status == 'approved'
-    end
   end
 end

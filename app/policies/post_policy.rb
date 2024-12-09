@@ -8,6 +8,10 @@ class PostPolicy < ApplicationPolicy
     user.author? && record.user == user
   end
 
+  def destroy?
+    user.author? && record.user == user
+  end
+
   def approve?
     user.editor? && record.status == 'pending_approval'
   end
