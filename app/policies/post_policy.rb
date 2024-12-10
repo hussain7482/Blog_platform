@@ -1,4 +1,3 @@
-# app/policies/post_policy.rb
 class PostPolicy < ApplicationPolicy
   def create?
     user.author? || user.editor? || user.admin?

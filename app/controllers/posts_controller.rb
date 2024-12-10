@@ -1,4 +1,3 @@
-# app/controllers/posts_controller.rb
 class PostsController < ApplicationController
   include Pundit
   before_action :authenticate_user!

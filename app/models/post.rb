@@ -18,6 +18,6 @@ class Post < ApplicationRecord
   private
 
   def set_default_status
-    self.status ||= 'draft' # This will set the status to 'draft' if it's nil
+    self.status ||= 'draft'
   end
 end
